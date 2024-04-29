@@ -1,7 +1,9 @@
 import { Router } from "express";
+import { studentController } from "../controllers/student.controller.js";
 
 const router = Router()
 
-router.get('/', (req, res) => res.json({ ok: true }))
+// PATH: '/students'
+router.get('/', studentController.allStudents)
 
 export default router;
