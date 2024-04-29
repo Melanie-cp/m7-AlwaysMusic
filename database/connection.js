@@ -4,7 +4,7 @@ const { Pool } = pg
 
 const connectionString = process.env.CONNECTION_STRING
 
-const pool = new Pool({
+export const pool = new Pool({
     connectionString,
     allowExitOnIdle: true,
 })
