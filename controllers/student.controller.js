@@ -47,6 +47,31 @@ const createStudent = async (req, res) => {
     }
 }
 
+const updateStudent = async (req, res) => {
+    try {
+        const { rut } = req.params;
+        const { nombre, curso, nivel } = req.body;
+
+        const existingStudent = await studentModel.findOneByRut(rut);
+        if (!existingStudent) {
+            return res.status(404).json({ ok: false, msg: "No se encontró el estudiante" });
+        }
+
+        const updatedStudent = {
+            rut: existingStudent.rut,
+            nombre: nombre || existingStudent.nombre,
+            curso: curso || existingStudent.curso,
+            nivel: nivel || existingStudent.nivel
+        };
+
+        const updatedStudentDB = await studentModel.update(rut, updatedStudent);
+        return res.json({ ok: true, updated: updatedStudentDB });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ ok: false });
+    }
+};
+
 const removeStudent = async (req, res) => {
     try {
         const { rut } = req.params
@@ -62,5 +87,6 @@ export const studentController = {
     allStudents,
     uniqueStudent,
     createStudent,
+    updateStudent,
     removeStudent
 }

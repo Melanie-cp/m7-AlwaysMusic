@@ -23,6 +23,15 @@ const create = async ({ rut, nombre, curso, nivel }) => {
     return rows[0]
 }
 
+const update = async (rut, updatedStudent) => {
+    const query = {
+        text: 'UPDATE STUDENTS SET nombre = $2, curso = $3, nivel = $4 WHERE rut = $1 RETURNING *',
+        values: [rut, updatedStudent.nombre, updatedStudent.curso, updatedStudent.nivel]
+    };
+    const { rows } = await pool.query(query);
+    return rows[0];
+};
+
 
 const remove = async (rut) => {
     const querySQL = 'DELETE FROM STUDENTS WHERE rut = $1 RETURNING *;'
@@ -31,5 +40,9 @@ const remove = async (rut) => {
 }
 
 export const studentModel = {
-    findAll, findOneByRut, create, remove
+    findAll,
+    findOneByRut,
+    create,
+    update,
+    remove
 }
