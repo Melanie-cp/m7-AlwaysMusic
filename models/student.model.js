@@ -34,9 +34,12 @@ const update = async (rut, updatedStudent) => {
 
 
 const remove = async (rut) => {
-    const querySQL = 'DELETE FROM STUDENTS WHERE rut = $1 RETURNING *;'
-    const { rows } = await pool.query(querySQL, [rut])
-    return rows
+    const query = {
+        text: 'DELETE FROM STUDENTS WHERE rut = $1 RETURNING *;',
+        values: [rut]
+    }
+    const { rows } = await pool.query(query);
+    return rows[0];
 }
 
 export const studentModel = {

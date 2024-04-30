@@ -28,7 +28,7 @@ const createStudent = async (req, res) => {
     try {
         const { rut, nombre, curso, nivel } = req.body
 
-        if (!rut || !nombre || !curso || !nivel || !rut.trim() || !nombre.trim() || !curso.trim() || !nivel.trim()) {
+        if (!rut || !nombre || !curso || !nivel || !rut.trim() || !nombre.trim() || !curso.trim() || !nivel.toString().trim()) {
             return res.status(400).json({ ok: false, msg: "Todos los campos son requeridos" });
         }
 
