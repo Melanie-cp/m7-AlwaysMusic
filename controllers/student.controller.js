@@ -14,7 +14,6 @@ const allStudents = async (req, res) => {
 const uniqueStudent = async (req, res) => {
     try {
         const { rut } = req.params
-        //validaciones
 
         const student = await studentModel.findOneByRut(rut)
         if (!student) return res.status(404).json({ ok: false, msg: "no se encontró el rut" })
@@ -28,10 +27,14 @@ const uniqueStudent = async (req, res) => {
 const createStudent = async (req, res) => {
     try {
         const { rut, nombre, curso, nivel } = req.body
-        //validar rut, nombre, curso y nivel
 
-        if (!rut || !rut.trim()) {
-            return res.status(400).json({ ok: false, msg: "Se necesita el campo rut" })
+        if (!rut || !nombre || !curso || !nivel || !rut.trim() || !nombre.trim() || !curso.trim() || !nivel.trim()) {
+            return res.status(400).json({ ok: false, msg: "Todos los campos son requeridos" });
+        }
+
+        const existingStudent = await studentModel.findOneByRut(rut);
+        if (existingStudent) {
+            return res.status(400).json({ ok: false, msg: "El rut ya existe" });
         }
 
         const newStudent = { rut, nombre, curso, nivel }
@@ -52,9 +55,17 @@ const updateStudent = async (req, res) => {
         const { rut } = req.params;
         const { nombre, curso, nivel } = req.body;
 
+        if (!nombre && !curso && !nivel) {
+            return res.status(400).json({ ok: false, msg: "Se necesita al menos un campo para actualizar" });
+        }
+
         const existingStudent = await studentModel.findOneByRut(rut);
         if (!existingStudent) {
             return res.status(404).json({ ok: false, msg: "No se encontró el estudiante" });
+        }
+
+        if (rut !== existingStudent.rut) {
+            return res.status(400).json({ ok: false, msg: "No se puede modificar el rut" });
         }
 
         const updatedStudent = {
