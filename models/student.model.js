@@ -1,7 +1,10 @@
 import { pool } from '../database/connection.js'
 
 const findAll = async () => {
-    const { rows } = await pool.query("SELECT * FROM STUDENTS LIMIT 10")
+    const query = {
+        text: "SELECT * FROM STUDENTS LIMIT 10"
+    }
+    const { rows } = await pool.query(query)
     return rows
 }
 
